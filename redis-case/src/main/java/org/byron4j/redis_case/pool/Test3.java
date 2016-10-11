@@ -18,6 +18,6 @@ public class Test3 {
 		System.out.println(App.sdf.format(new Date()) + " - " + JedisUtil.getValue("key1"));
 		
 		System.out.println(App.sdf.format(new Date()) + " - " + JedisUtil.lpush("listKey1", "listVal1"));
-		
+		System.out.println(App.sdf.format(new Date()) + " - " + "Test3结束操作.");
 	}
 }

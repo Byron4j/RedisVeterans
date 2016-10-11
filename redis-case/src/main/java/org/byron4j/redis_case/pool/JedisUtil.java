@@ -2,6 +2,7 @@ package org.byron4j.redis_case.pool;
 
 import java.util.List;
 import java.util.PropertyResourceBundle;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -188,6 +189,21 @@ public class JedisUtil {
 		return result;
 	}
 	
+	/**
+	 * 按匹配模式查看键
+	 * @param pattern
+	 * @return
+	 */
+	public Set<String> checkKeys(String pattern){
+		Set<String> keySet = null;
+		try{
+			keySet = getConnection().keys(pattern);
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.info("按匹配模式查看键失败!");
+		}
+		return keySet;
+	}
 	
 	
 	/*
@@ -306,6 +322,7 @@ public class JedisUtil {
 		List<String> result = null;
 		try{
 			result = getConnection().brpop(timeout, key);
+			
 		}catch(Exception e){
 			e.printStackTrace();
 			logger.info("通过brpop获取list值失败!");
