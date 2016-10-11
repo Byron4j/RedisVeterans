@@ -76,6 +76,21 @@ public class JedisUtil {
 	}
 	
 	
+	/**
+	 * 关闭连接
+	 * @return
+	 */
+	public String closeConnection(){
+		String result = null;
+		try{
+			result = getConnection().quit();
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.info("关闭redis连接失败!");
+		}
+		return result;
+	}
+	
 	/*
 	 * 1 - 封装通用方法 
 	 */
