@@ -7,9 +7,11 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.JedisPubSub;
 
 
 
@@ -344,6 +346,38 @@ public class JedisUtil {
 		}
 		return result;
 	}
+	
+	
+	
+	/*
+	 * publish/subscribe封装
+	 */
+	public static void subscribe(JedisPubSub jedisPubSub, String... key){
+		try{
+			getConnection().subscribe(jedisPubSub, key);
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.info("订阅" + key +"的消息失败!");
+		}
+	}
+	
+	
+	/*
+	 * 地理位置信息封装
+	 */
+	
+	/**
+	 * 获取经纬度
+	 * @param key
+	 * @param members
+	 * @return
+	 */
+	public static List<GeoCoordinate> geopos(String key, String... members ){
+		List<GeoCoordinate> result = getConnection().geopos(key, members);
+		
+		return result;
+	}
+	
 	
 	/*
 	 * ...其余操作封装
