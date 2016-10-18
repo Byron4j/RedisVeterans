@@ -126,7 +126,7 @@ OK
 
 
 ###**DEBUG命令**
-####**DEBUG OBJECT key **
+####**DEBUG OBJECT key**
 **<code>DEBUG OBJECT key</code>** 命令获取一个key的debug信息。
 在测试该命令的之前，笔者使用了```slaveof 127.0.0.1 6379```将当前作为从服务器，则添加key时，会提示错误（slave不允许写操作），需要关闭服务之后重新启动，使用role命令返回master即可。
 **debug object key** 会返回一些信息：key值所在位置、引用次数、编码、序列化长度、LRU算法
