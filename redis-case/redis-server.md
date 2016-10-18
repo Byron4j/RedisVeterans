@@ -128,27 +128,20 @@ OK
 ###**DEBUG命令**
 ####**DEBUG OBJECT key **
 **<code>DEBUG OBJECT key</code>** 命令获取一个key的debug信息。
+在测试该命令的之前，笔者使用了```slaveof 127.0.0.1 6379```将当前作为从服务器，则添加key时，会提示错误（slave不允许写操作），需要关闭服务之后重新启动，使用role命令返回master即可。
+**debug object key** 会返回一些信息：key值所在位置、引用次数、编码、序列化长度、LRU算法
 ```
-
-```
-
-####**time**
-**<code>TIME</code>** 命令获取服务器当前时间，返回当前Unix时间戳和这一秒已经过去的微秒数2个值。
--  UNIX时间戳（单位：秒）
--  微秒
-```
-127.0.0.1:6379> time
-1) "1476685454"
-2) "587363"
-...
-127.0.0.1:6379> time
-1) "1476685598"
-2) "244845"
+127.0.0.1:6379> debug object testKey
+Value at:00007FF405231A70 refcount:1 encoding:raw serializedlength:5 lru:0 lru_seconds_idle:363238
 ```
 
 
+####**DEBUG SEGFAULT**
+**<code>debug segfault</code>** 命令模拟服务崩溃指令，导致服务关闭。
+
+###**LOG命令**
 ####**slowlog**
-**<code>SLOWLOG subcommond [args]</code>** 命令处理redis慢查询。**subcommond** 可选的包括：get、reset、len
+**<code>SLOWLOG subcommond [args]</code>** 命令处理redis慢查询。**subcommond** 可选的包括：**get**、**reset**、**len**
 ```
 //提示slowlog的参数不正确
 127.0.0.1:6379> slowlog
@@ -179,6 +172,10 @@ OK
 -  slowlog-max-len 128 : 指定慢查询的记录数长度，最多记录128条。
 
 
+
+
+
+###**INFO命令**
 ####**info**
 ***INFO [section]*** 获取服务器详细信息，如果指定section如CPU，则展示指定section的配置信息。
 
@@ -284,6 +281,22 @@ used_cpu_sys_children:0.00
 used_cpu_user_children:0.00
 ```
 
+
+####**time**
+**<code>TIME</code>** 命令获取服务器当前时间，返回当前Unix时间戳和这一秒已经过去的微秒数2个值。
+-  UNIX时间戳（单位：秒）
+-  微秒
+```
+127.0.0.1:6379> time
+1) "1476685454"
+2) "587363"
+...
+127.0.0.1:6379> time
+1) "1476685598"
+2) "244845"
+```
+
+
 ####**dbsize**
 ***dbsize*** 获取当前数据库中keys的数量。
 ```
@@ -291,3 +304,55 @@ used_cpu_user_children:0.00
 (integer) 4
 ```
 
+####**keys pattern**
+***keys pattern*** 返回匹配pattern模式的key。
+```
+127.0.0.1:6379> keys *
+1) "testKey"
+127.0.0.1:6379> lpush listKey 'val1'
+(integer) 1
+127.0.0.1:6379> keys *
+1) "testKey"
+2) "listKey"
+127.0.0.1:6379> keys t*
+1) "testKey"
+```
+
+###**SERVER命令**
+####**SHUTDOWN**
+***shutdown*** 会关闭当前连接的Redis服务器。
+
+####**MONITOR**
+***monitor*** 是一个调试命令，返回服务器处理的每一个命令，它能帮助我们了解在数据库上发生了什么操作，可以通过redis-cli和telnet命令使用。
+```
+/*客户端1：监听*/
+127.0.0.1:6379> monitor
+OK
+
+/*客户端2*/
+127.0.0.1:6379> keys *
+1) "testKey"
+2) "listKey"
+127.0.0.1:6379> client getname
+(nil)
+
+/*客户端2执行命令时，可以看到监听客户端1的输出信息：*/
+1476759059.765371 [0 127.0.0.1:58776] "keys" "*"
+1476759066.213351 [0 127.0.0.1:58776] "client" "getname"
+```
+
+####**SLAVEOF host port**
+***slaveof host port*** 会指定当前服务器作为指定host的slave。
+```
+> slaveof 127.0.0.1 6379
+> OK
+```
+
+####**SYNC**
+***sync*** 用于复制的内部命令。
+ 
+####**FLUSHDB**
+***flushdb*** 命令会清除当前数据库实例的所有key。
+
+####**FLUSHALL**
+***flushall*** 命令会清除当前服务器所有数据库实例的所有key。
