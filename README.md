@@ -1,7 +1,7 @@
 #**Personal study-note on redis**
 
 <p>
-**In this redis repository,\*.md file under per project showing my study-note on redis command and examples.**
+###**In this redis repository,\*.md file under per project showing my study-note on redis command and examples**
 </p>
 
 </p>
