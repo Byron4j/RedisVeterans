@@ -343,6 +343,7 @@ OK
 
 ####**SLAVEOF host port**
 ***slaveof host port*** 会指定当前服务器作为指定host的slave。
+在redis.conf 中修改默认配置slave-read-only yes -> slave-read-only no 可以调整slave的操作数据权限（仅仅测试使用，不建议在生产这样修改！）
 ```
 > slaveof 127.0.0.1 6379
 > OK
