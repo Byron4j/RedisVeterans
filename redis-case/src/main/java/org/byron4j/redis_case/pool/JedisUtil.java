@@ -379,6 +379,49 @@ public class JedisUtil {
 	}
 	
 	
+	/**
+	 * 分布式锁
+	 * @param key
+	 * @param value
+	 */
+	public static Long lock4Concurr(String key,String value){
+		Jedis jedis = getConnection();
+		Long exec = 0L;
+		try {
+			exec = jedis.setnx("LOCK." + key, value);
+			if( exec == 1 ){
+				jedis.expire(key, 15);
+			}
+			return exec;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(jedis !=null){
+				jedis.close();
+			}
+		}
+		return exec;
+	}
+	
+	/**
+	 * 释放分布式锁
+	 * @param key
+	 * @param value
+	 */
+	public static void releaseLock4Concurr(String key){
+		Jedis jedis = getConnection();
+		try {
+			jedis.del("LOCK." + key);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(jedis !=null){
+				jedis.close();
+			}
+		}
+	}
+	
+	
 	/*
 	 * ...其余操作封装
 	 */
