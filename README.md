@@ -1,7 +1,6 @@
-# **Personal study-note on redis**
+# **Redis从新手到老鸟**
 
 
-**In this redis repository,\*.md file under per project showing my study-note on redis command and examples**
+**从最基本的redis知识点到集群、复制、lua脚本、事务、缓存、集成java**
 
 
-**In the redis-case project which provide a JedisUtil.java to operate redis in JAVA programming language**
